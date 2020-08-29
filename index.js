@@ -72,12 +72,14 @@ const runThis = async (id, p) => {
 
   // console.log({ title, author, imageUrl, narrator, runtime, releaseDate, language, rating, series, description });
 
-  const image = await axios({ method: 'get', url: imageUrl, responseType: 'arraybuffer' });
-  fs.writeFile(path.join(p, 'cover.jpg'), image.data, function (err) {
-    if (err) return console.log(err);
-    console.log(`Wrote Cover for id ${id}`);
-  });
-
+  if (imageUrl) {
+    const image = await axios({ method: 'get', url: imageUrl, responseType: 'arraybuffer' });
+    fs.writeFile(path.join(p, 'cover.jpg'), image.data, function (err) {
+      if (err) return console.log(err);
+      console.log(`Wrote Cover for id ${id}`);
+    });
+  }
+  
   const a = {
     name: title,
     sortname: title.replace('The ', ''),
@@ -124,7 +126,7 @@ const runThis = async (id, p) => {
       path.join(finalDir, `${series} (${title}).m4b`),
       function (err) {
         if (err) throw err;
-        console.log(`renamed ${oldPath} to ${newPath}`);
+        console.log(`renamed ${path.join(outputDir, `${series} (${title}).m4b`)} to ${path.join(finalDir, `${series} (${title}).m4b`)}`);
       });
 
     // Clean up
@@ -136,3 +138,9 @@ const runThis = async (id, p) => {
   });
 };
 
+
+
+
+let str = "Thid id s WRONGB stribg";
+str = str.toLowerCase();
+str = str.replace(' ', '-');
