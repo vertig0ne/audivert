@@ -10,6 +10,8 @@ const rootDir = process.argv[2];
 const outputDir = process.argv[3];
 const finalDir = process.argv[4];
 
+const hook_url = process.env.HOOK_URL;
+
 (async () => {
   const dir = await fs.readdirSync(rootDir);
 
@@ -27,15 +29,15 @@ const finalDir = process.argv[4];
 
 const runThis = async (id, p) => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
     ]
   });
   const page = await browser.newPage();
-  console.log(`https://www.audible.com/search?keywords=${id}`);
-  await page.goto(`https://www.audible.com/search?keywords=${id}`);
+  console.log(`https://www.audible.com/search?ipRedirectOverride=true&overrideBaseCountry=true&keywords=${id}`);
+  await page.goto(`https://www.audible.com/search?ipRedirectOverride=true&overrideBaseCountry=true&keywords=${id}`);
   await page.waitForSelector('.bc-link');
   const html = await page.content();
   const $ = cheerio.load(html);
@@ -108,7 +110,7 @@ const runThis = async (id, p) => {
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
   m4b.stdout.on('data', (data) => {
-    console.log(`${data}`);
+    printProgress(`${data}`);
   });
 
   m4b.stderr.on('data', (data) => {
@@ -129,6 +131,10 @@ const runThis = async (id, p) => {
         console.log(`renamed ${path.join(outputDir, `${series} (${title}).m4b`)} to ${path.join(finalDir, `${series} (${title}).m4b`)}`);
       });
 
+    if (hook_url) axios({ method: 'post', url: hook_url, data: {
+      "content": "Book ${d} has been completed"
+    } });
+
     // Clean up
     const dir = p;
     fs.rmdir(dir, { recursive: true }, (err) => {
@@ -138,9 +144,8 @@ const runThis = async (id, p) => {
   });
 };
 
-
-
-
-let str = "Thid id s WRONGB stribg";
-str = str.toLowerCase();
-str = str.replace(' ', '-');
+const printProgress = (progress) => {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(progress);
+}
