@@ -1,5 +1,5 @@
 {
-  "name": "audible-extract",
+  "name": "audible-scraper",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.20.0",
     "cheerio": "^1.0.0-rc.3",
     "moment": "^2.27.0",
     "puppeteer": "^5.1.0"
