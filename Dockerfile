@@ -7,6 +7,8 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && bas
 
 RUN apt update && apt install -y nodejs
 
+RUN wget https://github.com/sandreas/m4b-tool/releases/download/v.0.4.2/m4b-tool.phar -O /usr/local/bin/m4b-tool && chmod +x /usr/local/bin/m4b-tool
+
 COPY . /app
 WORKDIR /app
 
