@@ -110,7 +110,7 @@ const runThis = async (id, p) => {
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
   m4b.stdout.on('data', (data) => {
-    printProgress(`${data}`);
+    console.log(`${data}`);
   });
 
   m4b.stderr.on('data', (data) => {
