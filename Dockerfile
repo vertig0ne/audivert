@@ -11,4 +11,8 @@ WORKDIR /app
 
 RUN npm i
 
-ENTRYPOINT [ "node", "." ]
+VOLUME "/input"
+VOLUME "/intermediate"
+VOLUME "/output"
+
+ENTRYPOINT [ "node", ".", "/input", "/intermediate", "/output" ]
