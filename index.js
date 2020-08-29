@@ -29,7 +29,7 @@ const hook_url = process.env.HOOK_URL;
 
 const runThis = async (id, p) => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
