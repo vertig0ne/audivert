@@ -42,6 +42,7 @@ const runThis = async (id, p) => {
   await page.waitForSelector('.bc-link');
   const html = await page.content();
   const $ = cheerio.load(html);
+  await browser.close();
 
   const title = $('.bc-heading').find('.bc-link').text();
   const author = $('.authorLabel').find('.bc-link').map(function () {
