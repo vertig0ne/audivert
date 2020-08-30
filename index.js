@@ -128,9 +128,7 @@ const runThis = async (id, p) => {
     console.log(path.join(outputDir, `${series} (${title}).m4b`),
     path.join(finalDir, `${series} (${title}).m4b`));
     
-    fs.copyFileSync(
-      path.join(outputDir),
-      path.join(finalDir);
+    fs.copyFileSync(outputDir, finalDir);
 
     console.log(`renamed`);
     fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
