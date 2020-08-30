@@ -128,7 +128,7 @@ const runThis = async (id, p) => {
     console.log(path.join(outputDir, `${series} (${title}).m4b`),
     path.join(finalDir, `${series} (${title}).m4b`));
     
-    await fs.copyFileSync(
+    fs.copyFileSync(
       path.join(outputDir, `${series} (${title}).m4b`),
       path.join(finalDir, `${series} (${title}).m4b`));
 
