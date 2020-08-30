@@ -1,16 +1,17 @@
+const { spawn } = require('child_process');
 const puppeteer = require("puppeteer");
 const cheerio = require("cheerio");
 const moment = require("moment");
 const axios = require("axios");
-const fs = require("fs");
 const path = require("path");
-const { spawn } = require('child_process');
+const fs = require("fs");
 
 const rootDir = process.argv[2];
 const outputDir = process.argv[3];
 const finalDir = process.argv[4];
 
 const hook_url = process.env.HOOK_URL;
+const max_jobs = process.env.MAX_JOBS || 4;
 
 (async () => {
   const dir = await fs.readdirSync(rootDir);
@@ -106,7 +107,7 @@ const runThis = async (id, p) => {
   });
 
   // m4b-tool merge -vv "fifty shades of grey/" --output-file "not-lerams-workout-mix.m4b"
-  const args = ['merge', '-vv', p, '--use-filenames-as-chapters', '--output-file', path.join(outputDir, `${series} (${title}).m4b`), ...b];
+  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, '--use-filenames-as-chapters', '--output-file', path.join(outputDir, `${series} (${title}).m4b`), ...b];
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
   m4b.stdout.on('data', (data) => {
@@ -123,12 +124,16 @@ const runThis = async (id, p) => {
 
     // move output file to final destination
 
-    fs.rename(
+    fs.copyFile(
       path.join(outputDir, `${series} (${title}).m4b`),
       path.join(finalDir, `${series} (${title}).m4b`),
       function (err) {
         if (err) throw err;
         console.log(`renamed ${path.join(outputDir, `${series} (${title}).m4b`)} to ${path.join(finalDir, `${series} (${title}).m4b`)}`);
+        fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
+          if (err) throw err;
+          console.log(`deleted ${path.join(outputDir, `${series} (${title}).m4b`)}`);
+        });
       });
 
     if (hook_url) axios({ method: 'post', url: hook_url, data: {
