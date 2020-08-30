@@ -128,17 +128,15 @@ const runThis = async (id, p) => {
     console.log(path.join(outputDir, `${series} (${title}).m4b`),
     path.join(finalDir, `${series} (${title}).m4b`));
     
-    fs.copyFileSync(
+    await fs.copyFileSync(
       path.join(outputDir, `${series} (${title}).m4b`),
-      path.join(finalDir, `${series} (${title}).m4b`),
-      function (err) {
-        if (err) throw err;
-        console.log(`renamed ${path.join(outputDir, `${series} (${title}).m4b`)} to ${path.join(finalDir, `${series} (${title}).m4b`)}`);
-        fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
-          if (err) throw err;
-          console.log(`deleted ${path.join(outputDir, `${series} (${title}).m4b`)}`);
-        });
-      });
+      path.join(finalDir, `${series} (${title}).m4b`));
+
+    console.log(`renamed ${path.join(outputDir, `${series} (${title}).m4b`)} to ${path.join(finalDir, `${series} (${title}).m4b`)}`);
+    fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
+      if (err) throw err;
+      console.log(`deleted ${path.join(outputDir, `${series} (${title}).m4b`)}`);
+    });
 
     if (hook_url) axios({ method: 'post', url: hook_url, data: {
       "content": "Book ${d} has been completed"
