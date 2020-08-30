@@ -107,7 +107,7 @@ const runThis = async (id, p) => {
   });
 
   // m4b-tool merge -vv "fifty shades of grey/" --output-file "not-lerams-workout-mix.m4b"
-  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, '--use-filenames-as-chapters', '--output-file', path.join(outputDir, `${series} (${title}).m4b`), ...b];
+  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, `--ffmpeg-threads=${max_jobs * 4}`, '--use-filenames-as-chapters', '--output-file', path.join(outputDir, `${series} (${title}).m4b`), ...b];
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
   m4b.stdout.on('data', (data) => {
@@ -124,6 +124,9 @@ const runThis = async (id, p) => {
 
     // move output file to final destination
 
+    console.log(path.join(outputDir, `${series} (${title}).m4b`),
+    path.join(finalDir, `${series} (${title}).m4b`));
+    
     fs.copyFile(
       path.join(outputDir, `${series} (${title}).m4b`),
       path.join(finalDir, `${series} (${title}).m4b`),
