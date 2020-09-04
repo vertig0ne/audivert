@@ -108,7 +108,7 @@ const runThis = async (id, p) => {
   });
 
   // m4b-tool merge -vv "fifty shades of grey/" --output-file "not-lerams-workout-mix.m4b"
-  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, `--ffmpeg-threads=${max_jobs * 4}`, '--use-filenames-as-chapters', '--output-file', path.join(outputDir, `${series} (${title}).m4b`), ...b];
+  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, `--ffmpeg-threads=${max_jobs * 4}`, '--use-filenames-as-chapters', '--output-file', path.join(finalDir, `${series} (${title}).m4b`), ...b];
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
   m4b.stdout.on('data', (data) => {
@@ -125,27 +125,27 @@ const runThis = async (id, p) => {
 
     // move output file to final destination
 
-    console.log(path.join(outputDir, `${series} (${title}).m4b`),
-    path.join(finalDir, `${series} (${title}).m4b`));
+    // console.log(path.join(outputDir, `${series} (${title}).m4b`),
+    // path.join(finalDir, `${series} (${title}).m4b`));
     
-    fs.copyFileSync(outputDir, finalDir);
+    // fs.copyFileSync(outputDir, finalDir);
 
-    console.log(`renamed`);
-    fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
-      if (err) throw err;
-      console.log(`deleted ${path.join(outputDir, `${series} (${title}).m4b`)}`);
-    });
+    // console.log(`renamed`);
+    // fs.unlink(path.join(outputDir, `${series} (${title}).m4b`), function (err) {
+    //   if (err) throw err;
+    //   console.log(`deleted ${path.join(outputDir, `${series} (${title}).m4b`)}`);
+    // });
 
     if (hook_url) axios({ method: 'post', url: hook_url, data: {
       "content": "Book ${d} has been completed"
     } });
 
     // Clean up
-    const dir = p;
-    fs.rmdir(dir, { recursive: true }, (err) => {
-      if (err) throw err;
-      console.log(`${dir} is deleted!`);
-    });
+    // const dir = p;
+    // fs.rmdir(dir, { recursive: true }, (err) => {
+    //   if (err) throw err;
+    //   console.log(`${dir} is deleted!`);
+    // });
   });
 };
 
