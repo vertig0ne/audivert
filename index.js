@@ -103,12 +103,21 @@ const runThis = async (id, p) => {
     "series-part": series?.split(',')[1],
   };
 
-  const b = Object.keys(a).map((k) => {
-    return `--${k}="${a[k]}"`;
-  });
+  // const b = Object.keys(a).map((k) => {
+  //   return `--${k}="${a[k]}"`;
+  // });
+  const b = [];
 
   // m4b-tool merge -vv "fifty shades of grey/" --output-file "not-lerams-workout-mix.m4b"
-  const args = ['merge', '-vv', p, `--jobs=${max_jobs}`, `--ffmpeg-threads=${max_jobs * 4}`, `--output-file=${finalDir}/${series} (${title}).m4b`, ...b];
+  const args = [
+    'merge', 
+    '-vv',
+    p,
+    `--jobs=${max_jobs}`,
+    `--ffmpeg-threads=${max_jobs * 4}`,
+    `--output-file=${finalDir}/${series} (${title}).m4b`,
+    ...b
+  ];
   console.log(args);
   const m4b = spawn('/usr/local/bin/m4b-tool', args);
 
